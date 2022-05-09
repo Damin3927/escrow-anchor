@@ -59,10 +59,7 @@ impl<'info> Exchange<'info> {
 
     fn into_transfer_to_taker_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
         let cpi_accounts = Transfer {
-            from: self
-                .initializer_deposit_token_account
-                .to_account_info()
-                .clone(),
+            from: self.vault_account.to_account_info().clone(),
             to: self.taker_receive_token_account.to_account_info().clone(),
             authority: self.vault_authority.to_account_info().clone(),
         };
@@ -80,6 +77,7 @@ impl<'info> Exchange<'info> {
 }
 
 pub fn process_exchange(ctx: Context<Exchange>) -> Result<()> {
+    msg!("Hi!");
     let (_vault_authority, vault_authority_bump) =
         Pubkey::find_program_address(&[VAULT_AUTHORITY_SEED], ctx.program_id);
 
