@@ -28,7 +28,7 @@ describe("initialize", function () {
   const takerAmount = 1000;
   const initializerAmount = 500;
 
-  const escrowAccount = anchor.web3.Keypair.generate();
+  let escrowAccount = anchor.web3.Keypair.generate();
   const payer = anchor.web3.Keypair.generate();
   const mintAuthority = anchor.web3.Keypair.generate(); // account that has the authority of mintA and mintB
   const initializerMainAccount = anchor.web3.Keypair.generate();
@@ -198,12 +198,14 @@ describe("initialize", function () {
     // mint A to initializer's tokenAccountA
     await mintTo(connection, payer, mintA, initializerTokenAccountA, mintAuthority, initializerAmount);
 
+    escrowAccount = anchor.web3.Keypair.generate();
+
     await program.methods
       .initialize(vault_account_bump, new anchor.BN(initializerAmount), new anchor.BN(takerAmount))
       .accounts({
         initializer: initializerMainAccount.publicKey,
-        vaultAccount: vault_account_pda,
         mint: mintA,
+        vaultAccount: vault_account_pda,
         initializerDepositTokenAccount: initializerTokenAccountA,
         initializerReceiveTokenAccount: initializerTokenAccountB,
         escrowAccount: escrowAccount.publicKey,
