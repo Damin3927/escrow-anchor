@@ -165,6 +165,35 @@ describe("initialize", function () {
     expect(_escrowAccount.initializerReceiveTokenAccount.equals(initializerTokenAccountB)).to.be.true;
   });
 
+  it("exchanges escrow state", async function () {
+    await program.methods
+      .exchange()
+      .accounts({
+        taker: takerMainAccount.publicKey,
+        takerDepositTokenAccount: takerTokenAccountB,
+        takerReceiveTokenAccount: takerTokenAccountA,
+        initializerDepositTokenAccount: initializerTokenAccountA,
+        initializerReceiveTokenAccount: initializerTokenAccountB,
+        initializer: initializerMainAccount.publicKey,
+        escrowAccount: escrowAccount.publicKey,
+        vaultAccount: vault_account_pda,
+        vaultAuthority: vault_authority_pda,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .signers([takerMainAccount])
+      .rpc();
+
+    let _takerTokenAccountA = await getAccount(connection, takerTokenAccountA);
+    let _takerTokenAccountB = await getAccount(connection, takerTokenAccountB);
+    let _initializerTokenAccountA = await getAccount(connection, initializerTokenAccountA);
+    let _initializerTokenAccountB = await getAccount(connection, initializerTokenAccountB);
+
+    expect(_takerTokenAccountA.amount).to.equal(BigInt(initializerAmount));
+    expect(_initializerTokenAccountA.amount).to.equal(BigInt(0));
+    expect(_initializerTokenAccountB.amount).to.equal(BigInt(takerAmount));
+    expect(_takerTokenAccountB.amount).to.equal(BigInt(0));
+  });
+
   it("initializes escrow and cancels escrow", async function () {
     // mint A to initializer's tokenAccountA
     await mintTo(connection, payer, mintA, initializerTokenAccountA, mintAuthority, initializerAmount);
