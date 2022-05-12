@@ -2,14 +2,13 @@ import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { PublicKey, SystemProgram, Transaction, Connection, Commitment, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { createAccount, createMint, getAccount, mintTo, TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { EscrowAnchor, IDL } from "../../target/types/escrow_anchor";
+import { EscrowAnchor, IDL } from "../target/types/escrow_anchor";
 import { expect } from "chai";
-import { extractConstValue } from "../../app/utils/constant";
+import { extractConstValue } from "../app/utils/constant";
 
 describe("initialize", function () {
   const provider = anchor.AnchorProvider.env();
   const connection = provider.connection;
-  // provider.opts.commitment = "finalized";
   anchor.setProvider(provider);
 
   const program = anchor.workspace.EscrowAnchor as Program<EscrowAnchor>;
