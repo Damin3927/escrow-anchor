@@ -6,7 +6,7 @@ import { EscrowAnchor, IDL } from "../target/types/escrow_anchor";
 import { expect } from "chai";
 import { extractConstValue } from "../app/utils/constant";
 
-describe("initialize", function () {
+describe("instructions", function () {
   const provider = anchor.AnchorProvider.env();
   const connection = provider.connection;
   anchor.setProvider(provider);
