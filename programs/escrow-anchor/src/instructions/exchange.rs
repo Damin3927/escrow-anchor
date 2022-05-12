@@ -77,7 +77,6 @@ impl<'info> Exchange<'info> {
 }
 
 pub fn process_exchange(ctx: Context<Exchange>) -> Result<()> {
-    msg!("Hi!");
     let (_vault_authority, vault_authority_bump) =
         Pubkey::find_program_address(&[VAULT_AUTHORITY_SEED], ctx.program_id);
 
